@@ -14,6 +14,20 @@ import LogIn from './Components/Authentication/LogIn.jsx';
 import AuthProvider from './Providers/AuthProvider.jsx';
 import Registration from './Components/Authentication/Registration.jsx';
 
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
+import MyCart from './Components/PrivateLayout/Pages/MyCart.jsx';
+import SideNav from './Components/PrivateLayout/SideNav.jsx';
+
+// Create a client
+const queryClient = new QueryClient()
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -41,14 +55,26 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path: "dashboard",
+    element:<SideNav></SideNav>,
+    children:[
+      {
+        path:"mycart",
+        element:<MyCart></MyCart>
+      }
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <div className='max-w-screen-xl mx-auto'>
-        <RouterProvider router={router} />
-      </div>
+      <QueryClientProvider client={queryClient}>
+        <div className='max-w-screen-xl mx-auto'>
+          <RouterProvider router={router} />
+        </div>
+      </QueryClientProvider>
     </AuthProvider>
   </React.StrictMode>,
 )

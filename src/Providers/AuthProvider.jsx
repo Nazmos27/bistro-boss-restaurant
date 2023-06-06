@@ -8,6 +8,18 @@ const AuthProvider = ({children}) => {
     const [user,setUser] = useState(null)
     const [loading,setLoading] = useState(true)
 
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth,currentUser => {
+            setUser(currentUser)
+        })
+        return () => {
+            return unsubscribe()
+        }
+    },[])
+
+    console.log(user)
+
+
     const createUser = (email,password) => {
         return createUserWithEmailAndPassword(auth,email,password)
     }
@@ -18,17 +30,6 @@ const AuthProvider = ({children}) => {
         return signOut(auth)
     }
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, currentUser => {
-            if(currentUser){
-                setUser(currentUser)
-                console.log(user);
-            }
-        })
-        return () => {
-            unsubscribe()
-        }
-    },[])
 
 
 

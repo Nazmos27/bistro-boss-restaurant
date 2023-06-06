@@ -6,26 +6,22 @@ import { useForm } from 'react-hook-form'
 const Registration = () => {
     const {createUser} = useContext(AuthContext)
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
+    const { register, handleSubmit,  formState: { errors } } = useForm();
+    const onSubmit = data => {
+        console.log(data);
+        createUser(data.email,data.password)
+        .then(result => {
+            const user = result.user
+            console.log(user);
+        })
+        .catch(error => {
+            console.log(error.message);
+        })
+    }
 
 
 
-    // const handleRegister = e => {
-    //     e.preventDefault()
-    //     const form = e.target
-    //     const email = form.email.value
-    //     const password = form.password.value
-    //     createUser(email,password)
-    //     .then(result => {
-    //         const user = result.user
-    //         console.log(user);
-    //     })
-    //     .catch(error => {
-    //         console.log(error.message);
-    //     })
 
-    // }
 
   return (
     <div>
@@ -43,7 +39,7 @@ const Registration = () => {
                                 </label>
                                 <input type="text" name='name' placeholder="Your Name" className="input input-bordered" />
                             </div>
-                            <div className="form-control">
+                            <div className="form-control ">
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
@@ -53,7 +49,7 @@ const Registration = () => {
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="text" {...register("password", { required: true })} placeholder="password" className="input input-bordered" />
+                                <input type="text" {...register("password", { required: true , minLength:6 })} placeholder="password" className="input input-bordered" />
                                 {errors.password && <span className='text-red-600 text-left'>*This field is required</span>}
                               
                             </div>
